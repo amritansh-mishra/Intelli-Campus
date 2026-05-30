@@ -1,224 +1,128 @@
-import { motion } from 'framer-motion';
 import { useState } from 'react';
-import {
-  Settings as SettingsIcon,
-  Moon,
-  Bell,
-  Volume2,
-  Globe,
-  Shield,
-  Palette,
-  Check,
-} from 'lucide-react';
-import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
+import { Bell, Volume2, Shield, Check } from 'lucide-react';
+import { AppLayout } from '../components/layout/AppLayout';
+import { PageHeader } from '../components/ui/PageHeader';
+import { Card, CardHeader } from '../components/ui/Card';
 
-interface ToggleSwitchProps {
+function ToggleSwitch({
+  enabled,
+  onChange,
+}: {
   enabled: boolean;
   onChange: (enabled: boolean) => void;
-}
-
-function ToggleSwitch({ enabled, onChange }: ToggleSwitchProps) {
+}) {
   return (
-    <motion.button
-      whileTap={{ scale: 0.95 }}
+    <button
+      type="button"
+      role="switch"
+      aria-checked={enabled}
       onClick={() => onChange(!enabled)}
-      className={`relative w-14 h-7 rounded-full transition-colors ${
-        enabled ? 'bg-blue-500' : 'bg-white/10'
+      className={`relative h-6 w-11 rounded-full transition-colors ${
+        enabled ? 'bg-primary' : 'bg-line'
       }`}
     >
-      <motion.div
-        animate={{ x: enabled ? 28 : 4 }}
-        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-        className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-lg"
+      <span
+        className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+          enabled ? 'translate-x-5' : 'translate-x-0'
+        }`}
       />
-    </motion.button>
+    </button>
   );
 }
 
 export default function Settings() {
   const [settings, setSettings] = useState({
-    darkMode: true,
     notifications: true,
     sounds: true,
     autoReminders: true,
     emailAlerts: false,
+    privacy: false,
     language: 'English',
   });
 
-  const updateSetting = (key: string, value: boolean | string) => {
+  const updateSetting = (key: keyof typeof settings, value: boolean | string) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
-  const settingGroups = [
-    {
-      title: 'Appearance',
-      icon: Palette,
-      settings: [
-        {
-          key: 'darkMode',
-          label: 'Dark Mode',
-          description: 'Enable dark theme for better visibility',
-          type: 'toggle',
-        },
-      ],
-    },
+  const groups = [
     {
       title: 'Notifications',
       icon: Bell,
-      settings: [
-        {
-          key: 'notifications',
-          label: 'Push Notifications',
-          description: 'Receive push notifications for events',
-          type: 'toggle',
-        },
-        {
-          key: 'emailAlerts',
-          label: 'Email Alerts',
-          description: 'Get email notifications for important events',
-          type: 'toggle',
-        },
+      items: [
+        { key: 'notifications' as const, label: 'Push notifications', desc: 'In-app alerts for events' },
+        { key: 'emailAlerts' as const, label: 'Email alerts', desc: 'Important updates via email' },
       ],
     },
     {
-      title: 'Sound & Voice',
+      title: 'Sound & voice',
       icon: Volume2,
-      settings: [
-        {
-          key: 'sounds',
-          label: 'Sound Effects',
-          description: 'Play sounds for notifications and actions',
-          type: 'toggle',
-        },
-        {
-          key: 'autoReminders',
-          label: 'Auto Voice Reminders',
-          description: 'Enable AI voice assistant for reminders',
-          type: 'toggle',
-        },
+      items: [
+        { key: 'sounds' as const, label: 'Sound effects', desc: 'UI feedback sounds' },
+        { key: 'autoReminders' as const, label: 'AI voice reminders', desc: 'Outbound calls via voice agent' },
       ],
     },
     {
-      title: 'Privacy & Security',
+      title: 'Privacy',
       icon: Shield,
-      settings: [
-        {
-          key: 'privacy',
-          label: 'Privacy Mode',
-          description: 'Hide event details in notifications',
-          type: 'toggle',
-        },
+      items: [
+        { key: 'privacy' as const, label: 'Privacy mode', desc: 'Hide event details in notifications' },
       ],
     },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B0F19]">
-      <Sidebar />
-      <Navbar />
+    <AppLayout title="Settings">
+      <div className="mx-auto max-w-3xl">
+        <PageHeader title="Settings" description="Manage your preferences and account" />
 
-      <main className="lg:ml-60 pt-24 pb-8 px-6">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3 mb-8"
-          >
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-              <SettingsIcon className="w-6 h-6 text-white" />
+        <div className="space-y-6">
+          {groups.map((group) => (
+            <Card key={group.title}>
+              <CardHeader title={group.title} />
+              <ul className="divide-y divide-line">
+                {group.items.map((item) => (
+                  <li
+                    key={item.key}
+                    className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-ink">{item.label}</p>
+                      <p className="text-sm text-muted">{item.desc}</p>
+                    </div>
+                    <ToggleSwitch
+                      enabled={settings[item.key] as boolean}
+                      onChange={(v) => updateSetting(item.key, v)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          ))}
+
+          <Card>
+            <CardHeader title="Language" description="Display language" />
+            <div className="flex flex-wrap gap-2">
+              {['English', 'Spanish', 'French', 'German'].map((lang) => (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => updateSetting('language', lang)}
+                  className={`flex items-center gap-1.5 rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
+                    settings.language === lang
+                      ? 'border-primary bg-primary/5 text-primary'
+                      : 'border-line text-muted hover:border-primary/30'
+                  }`}
+                >
+                  {settings.language === lang && <Check className="h-4 w-4" />}
+                  {lang}
+                </button>
+              ))}
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-white">Settings</h1>
-              <p className="text-gray-400">Customize your experience</p>
-            </div>
-          </motion.div>
+          </Card>
 
-          <div className="space-y-6">
-            {settingGroups.map((group, groupIndex) => (
-              <motion.div
-                key={group.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: groupIndex * 0.1 }}
-                className="glass-card rounded-2xl overflow-hidden"
-              >
-                <div className="p-4 border-b border-white/10 flex items-center gap-3">
-                  <group.icon className="w-5 h-5 text-blue-400" />
-                  <h2 className="font-semibold text-white">{group.title}</h2>
-                </div>
-
-                <div className="divide-y divide-white/5">
-                  {group.settings.map((setting, index) => (
-                    <motion.div
-                      key={setting.key}
-                      whileHover={{ backgroundColor: 'rgba(255,255,255,0.02)' }}
-                      className="p-4 flex items-center justify-between"
-                    >
-                      <div>
-                        <h3 className="text-white font-medium">
-                          {setting.label}
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          {setting.description}
-                        </p>
-                      </div>
-                      <ToggleSwitch
-                        enabled={settings[setting.key as keyof typeof settings] as boolean}
-                        onChange={(value) => updateSetting(setting.key, value)}
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="glass-card rounded-2xl overflow-hidden"
-            >
-              <div className="p-4 border-b border-white/10 flex items-center gap-3">
-                <Globe className="w-5 h-5 text-blue-400" />
-                <h2 className="font-semibold text-white">Language</h2>
-              </div>
-
-              <div className="p-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {['English', 'Spanish', 'French', 'German'].map((lang) => (
-                    <motion.button
-                      key={lang}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => updateSetting('language', lang)}
-                      className={`p-3 rounded-xl border transition-all flex items-center gap-2 ${
-                        settings.language === lang
-                          ? 'bg-blue-500/20 border-blue-500/30 text-blue-400'
-                          : 'bg-white/5 border-white/10 text-gray-400 hover:border-white/20'
-                      }`}
-                    >
-                      {settings.language === lang && (
-                        <Check className="w-4 h-4" />
-                      )}
-                      <span>{lang}</span>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="text-center text-gray-500 text-sm"
-            >
-              Intelli Campus v1.0.0
-            </motion.div>
-          </div>
+          <p className="text-center text-xs text-muted">Intelli Campus v1.0.0</p>
         </div>
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   );
 }

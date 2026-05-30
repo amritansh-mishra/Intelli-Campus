@@ -1,98 +1,58 @@
-import { motion } from 'framer-motion';
-import { Github, Twitter, Linkedin, Heart, GraduationCap } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Footer() {
   return (
-    <footer className="bg-dark-navy border-t border-glass-border mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <motion.div
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                className="p-2 rounded-lg bg-accent-blue/20"
-              >
-                <GraduationCap className="w-6 h-6 text-accent-blue" />
-              </motion.div>
-              <span className="font-bold text-xl text-pure-white">Intelli Campus</span>
+    <footer className="mt-auto border-t border-line bg-card">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <div className="grid gap-8 md:grid-cols-4">
+          <div className="md:col-span-2">
+            <div className="mb-3 flex items-center gap-2">
+              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10">
+                <GraduationCap className="h-5 w-5 text-primary" />
+              </div>
+              <span className="font-semibold text-ink">Intelli Campus</span>
             </div>
-            <p className="text-soft-gray text-sm max-w-md mb-4">
-              AI-powered campus reminder and event management platform.
-              Never miss an important event, deadline, or meeting again.
+            <p className="max-w-md text-sm text-muted">
+              Enterprise campus productivity with AI-powered voice reminders for students
+              and faculty.
             </p>
-            <div className="flex items-center gap-4">
-              <motion.a
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                href="#"
-                className="p-2 rounded-lg bg-glass-white hover:bg-glass-hover transition-colors"
-              >
-                <Github className="w-5 h-5 text-soft-gray hover:text-pure-white" />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                href="#"
-                className="p-2 rounded-lg bg-glass-white hover:bg-glass-hover transition-colors"
-              >
-                <Twitter className="w-5 h-5 text-soft-gray hover:text-pure-white" />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                href="#"
-                className="p-2 rounded-lg bg-glass-white hover:bg-glass-hover transition-colors"
-              >
-                <Linkedin className="w-5 h-5 text-soft-gray hover:text-pure-white" />
-              </motion.a>
-            </div>
           </div>
 
           <div>
-            <h4 className="font-semibold text-pure-white mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              {['Dashboard', 'Events', 'Add Event', 'Notifications'].map((item) => (
-                <li key={item}>
-                  <Link
-                    to={`/${item.toLowerCase().replace(' ', '-')}`}
-                    className="text-soft-gray hover:text-pure-white transition-colors text-sm"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="mb-3 text-sm font-semibold text-ink">Product</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link to="/voice-agent" className="text-muted hover:text-ink">
+                  AI Voice Agent
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard" className="text-muted hover:text-ink">
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link to="/events" className="text-muted hover:text-ink">
+                  Events
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold text-pure-white mb-4">Support</h4>
-            <ul className="space-y-2">
-              {['Help Center', 'FAQ', 'Privacy Policy', 'Terms of Service'].map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="text-soft-gray hover:text-pure-white transition-colors text-sm"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
+            <h4 className="mb-3 text-sm font-semibold text-ink">Support</h4>
+            <ul className="space-y-2 text-sm text-muted">
+              <li>Help center</li>
+              <li>Privacy policy</li>
+              <li>Terms of service</li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-glass-border">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-soft-gray text-sm">
-              © {new Date().getFullYear()} Intelli Campus. All rights reserved.
-            </p>
-            <p className="text-soft-gray text-sm flex items-center gap-1">
-              Made with <Heart className="w-4 h-4 text-red-500 fill-current" /> for students
-            </p>
-          </div>
-        </div>
+        <p className="mt-8 border-t border-line pt-6 text-center text-xs text-muted">
+          © {new Date().getFullYear()} Intelli Campus. All rights reserved.
+        </p>
       </div>
     </footer>
   );

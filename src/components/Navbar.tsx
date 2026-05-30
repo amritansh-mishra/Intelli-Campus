@@ -1,140 +1,104 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { GraduationCap, Menu, X } from 'lucide-react';
 import { NotificationBell } from './NotificationBell';
-import { Event } from '../services/supabase';
+import { Event } from '../data/dummyData';
 
 interface NavbarProps {
   events?: Event[];
   variant?: 'landing' | 'dashboard';
+  title?: string;
 }
 
-export function Navbar({ events = [], variant = 'landing' }: NavbarProps) {
+export function Navbar({ events = [], variant = 'landing', title = 'Dashboard' }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   if (variant === 'landing') {
     return (
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-dark-navy/80 backdrop-blur-xl border-b border-glass-border'
-            : 'bg-transparent'
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 border-b transition-colors ${
+          scrolled ? 'border-line bg-card/95 shadow-card backdrop-blur-sm' : 'border-transparent bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-3 group">
-              <motion.div
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                className="p-2 rounded-lg bg-accent-blue/20 group-hover:bg-accent-blue/30 transition-colors"
-              >
-                <GraduationCap className="w-6 h-6 text-accent-blue" />
-              </motion.div>
-              <span className="font-bold text-xl text-pure-white">Intelli Campus</span>
-            </Link>
-
-            <nav className="hidden md:flex items-center gap-8">
-              {['Features', 'About', 'Contact'].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="text-soft-gray hover:text-pure-white transition-colors"
-                >
-                  {item}
-                </a>
-              ))}
-            </nav>
-
-            <div className="hidden md:flex items-center gap-4">
-              <Link
-                to="/dashboard"
-                className="btn-secondary"
-              >
-                Login
-              </Link>
-              <Link
-                to="/dashboard"
-                className="btn-primary"
-              >
-                Get Started
-              </Link>
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
+          <Link to="/" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10">
+              <GraduationCap className="h-5 w-5 text-primary" />
             </div>
+            <span className="text-base font-semibold text-ink">Intelli Campus</span>
+          </Link>
 
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-glass-white"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6 text-pure-white" />
-              ) : (
-                <Menu className="w-6 h-6 text-pure-white" />
-              )}
-            </button>
+          <nav className="hidden items-center gap-8 md:flex">
+            {['Features', 'About', 'Contact'].map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="text-sm text-muted transition-colors hover:text-ink"
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+
+          <div className="hidden items-center gap-3 md:flex">
+            <Link to="/login" className="btn-secondary">
+              Sign in
+            </Link>
+            <Link to="/login" className="btn-primary">
+              Campus portal
+            </Link>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="rounded-md border border-line p-2 md:hidden"
+            aria-label="Menu"
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
 
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="md:hidden bg-dark-navy border-b border-glass-border"
-          >
-            <div className="px-4 py-4 space-y-4">
-              {['Features', 'About', 'Contact'].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="block text-soft-gray hover:text-pure-white transition-colors"
-                >
-                  {item}
-                </a>
-              ))}
-              <div className="pt-4 space-y-2">
-                <Link to="/dashboard" className="btn-secondary w-full text-center block">
-                  Login
-                </Link>
-                <Link to="/dashboard" className="btn-primary w-full text-center block">
-                  Get Started
-                </Link>
-              </div>
+          <div className="border-t border-line bg-card px-4 py-4 md:hidden">
+            {['Features', 'About', 'Contact'].map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="block py-2 text-sm text-muted"
+              >
+                {item}
+              </a>
+            ))}
+            <div className="mt-4 flex flex-col gap-2">
+              <Link to="/login" className="btn-secondary text-center">
+                Sign in
+              </Link>
+              <Link to="/signup" className="btn-primary text-center">
+                Register
+              </Link>
             </div>
-          </motion.div>
+          </div>
         )}
-      </motion.header>
+      </header>
     );
   }
 
   return (
-    <header className="sticky top-0 z-30 bg-dark-navy border-b border-glass-border">
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-4">
-            <h1 className="text-lg font-semibold text-pure-white capitalize">
-              {location.pathname.split('/').filter(Boolean).join(' ') || 'Dashboard'}
-            </h1>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <NotificationBell events={events} />
-
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-blue to-blue-600 flex items-center justify-center text-white font-semibold">
-                U
-              </div>
-            </div>
+    <header className="sticky top-0 z-30 border-b border-line bg-card">
+      <div className="flex h-14 items-center justify-between px-6">
+        <h1 className="text-base font-semibold text-ink">{title}</h1>
+        <div className="flex items-center gap-3">
+          <NotificationBell events={events} />
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+            U
           </div>
         </div>
       </div>

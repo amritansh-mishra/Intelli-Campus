@@ -1,13 +1,8 @@
-import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:5000';
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+/**
+ * @deprecated Use `src/lib/api.ts` and `src/services/campusService.ts` instead.
+ * Re-exported with /api base URL for backward compatibility.
+ */
+import api from '../lib/api';
 
 export const eventService = {
   getAllEvents: async () => {
@@ -15,8 +10,8 @@ export const eventService = {
     return response.data;
   },
 
-  addEvent: async (eventData: Event) => {
-    const response = await api.post('/addevent', eventData);
+  addEvent: async (eventData: Record<string, unknown>) => {
+    const response = await api.post('/events', eventData);
     return response.data;
   },
 
