@@ -7,7 +7,7 @@ import {
   useState,
   ReactNode,
 } from 'react';
-import { authService, LoginPayload, RegisterPayload } from '../services/authService';
+import { authService, LoginPayload, RegisterPayload } from '../shared/services/authService';
 import { AuthUser, ROLE_DASHBOARD, UserRole } from '../types';
 
 interface AuthContextValue {

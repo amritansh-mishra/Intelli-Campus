@@ -8,8 +8,8 @@ import {
   CheckCircle2,
   Users,
 } from 'lucide-react';
-import { Navbar } from '../components/Navbar';
-import { Footer } from '../components/Footer';
+import { Navbar } from '../shared/components/Navbar';
+import { Footer } from '../shared/components/Footer';
 
 const features = [
   {

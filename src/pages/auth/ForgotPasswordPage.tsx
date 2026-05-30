@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthLayout } from './AuthLayout';
-import { authService } from '../../services/authService';
+import { authService } from '../../shared/services/authService';
 import { UserRole } from '../../types';
 
 export default function ForgotPasswordPage() {
