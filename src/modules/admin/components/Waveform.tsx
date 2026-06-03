@@ -1,17 +1,26 @@
+import { motion } from 'framer-motion';
+
 interface WaveformProps {
   active?: boolean;
   className?: string;
+  color?: string;
 }
 
-export function Waveform({ active = false, className = '' }: WaveformProps) {
+export function Waveform({ active = false, className = '', color = 'bg-primary' }: WaveformProps) {
   return (
-    <div className={`flex h-6 items-end gap-0.5 ${className}`} aria-hidden>
+    <div className={`flex h-8 items-center justify-center gap-1 origin-center ${className}`} aria-hidden>
       {[1, 2, 3, 4, 5].map((i) => (
-        <span
+        <motion.span
           key={i}
-          className={`w-1 rounded-sm bg-primary/70 ${
-            active ? 'voice-wave-bar h-4 origin-bottom' : 'h-2 opacity-40'
-          }`}
+          initial={{ height: 8 }}
+          animate={active ? { height: [8, Math.random() * 20 + 10, 8] } : { height: 8 }}
+          transition={active ? {
+            repeat: Infinity,
+            duration: 0.8 + Math.random() * 0.4,
+            ease: "easeInOut",
+            delay: i * 0.1,
+          } : { duration: 0.3 }}
+          className={`w-1.5 rounded-full ${color}`}
         />
       ))}
     </div>

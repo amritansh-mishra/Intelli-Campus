@@ -1,10 +1,9 @@
-import { AdminLayout } from '../layouts/AdminLayout';
 import { VoiceAgentPanel } from '../components/VoiceAgentPanel';
 
 export default function AdminVoiceAgent() {
   return (
-    <AdminLayout title="AI Voice Agent">
+    <div className="animate-in fade-in duration-500 pb-8">
       <VoiceAgentPanel showScheduleAction />
-    </AdminLayout>
+    </div>
   );
 }

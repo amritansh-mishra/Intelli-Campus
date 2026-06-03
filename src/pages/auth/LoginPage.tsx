@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthLayout } from './AuthLayout';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types';
+import { Button } from '../../shared/components/Button';
+import { Input } from '../../shared/components/Input';
 
 const roles: { id: UserRole; label: string }[] = [
   { id: 'admin', label: 'Admin' },
@@ -61,44 +63,34 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div>
-          <label htmlFor="email" className="label-text">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            required
-            className="input-field"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@campus.edu"
-          />
-        </div>
+        <Input
+          label="Email"
+          id="email"
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@campus.edu"
+        />
 
-        <div>
-          <label htmlFor="password" className="label-text">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            required
-            className="input-field"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+        <Input
+          label="Password"
+          id="password"
+          type="password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
         {error && (
-          <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-danger">
+          <p className="rounded-md border border-danger/30 bg-red-50/50 px-3 py-2 text-sm text-danger">
             {error}
           </p>
         )}
 
-        <button type="submit" disabled={loading} className="btn-primary w-full">
-          {loading ? 'Signing in...' : 'Sign in'}
-        </button>
+        <Button type="submit" className="w-full" isLoading={loading}>
+          Sign in
+        </Button>
 
         <p className="text-center text-sm text-muted">
           <Link to="/forgot-password" className="text-primary hover:text-primary-hover">

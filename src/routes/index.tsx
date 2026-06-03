@@ -13,6 +13,7 @@ import { RequireRole } from '../shared/layouts/RequireRole';
 import { adminRoutes } from '../modules/admin/routes/adminRoutes';
 import { teacherRoutes } from '../modules/teacher/routes/teacherRoutes';
 import { studentRoutes } from '../modules/student/routes/studentRoutes';
+import { AdminLayout } from '../modules/admin/layouts/AdminLayout';
 
 function LegacyRedirect() {
   const { user, token } = useAuth();
@@ -34,13 +35,22 @@ export function AppRoutes() {
         path="/admin"
         element={
           <RequireRole allowed={['admin']}>
-            <Outlet />
+            <AdminLayout />
           </RequireRole>
         }
       >
         <Route index element={<Navigate to="dashboard" replace />} />
-        {adminRoutes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
+        {(adminRoutes as any[]).map((route) => (
+          <Route key={route.path} path={route.path} element={route.element}>
+            {route.children?.map((child: any) => (
+              <Route 
+                key={child.path || 'index'} 
+                index={child.index} 
+                path={child.path} 
+                element={child.element} 
+              />
+            ))}
+          </Route>
         ))}
       </Route>
 
@@ -54,8 +64,17 @@ export function AppRoutes() {
         }
       >
         <Route index element={<Navigate to="dashboard" replace />} />
-        {teacherRoutes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
+        {(teacherRoutes as any[]).map((route) => (
+          <Route key={route.path} path={route.path} element={route.element}>
+            {route.children?.map((child: any) => (
+              <Route 
+                key={child.path || 'index'} 
+                index={child.index} 
+                path={child.path} 
+                element={child.element} 
+              />
+            ))}
+          </Route>
         ))}
       </Route>
 
@@ -69,8 +88,17 @@ export function AppRoutes() {
         }
       >
         <Route index element={<Navigate to="dashboard" replace />} />
-        {studentRoutes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
+        {(studentRoutes as any[]).map((route) => (
+          <Route key={route.path} path={route.path} element={route.element}>
+            {route.children?.map((child: any) => (
+              <Route 
+                key={child.path || 'index'} 
+                index={child.index} 
+                path={child.path} 
+                element={child.element} 
+              />
+            ))}
+          </Route>
         ))}
       </Route>
 
